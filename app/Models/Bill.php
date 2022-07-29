@@ -9,6 +9,8 @@ class Bill extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function users()
     {
         return $this->belongsToMany(User::class);
@@ -17,5 +19,10 @@ class Bill extends Model
     public function billData()
     {
         return $this->hasMany(BillData::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 }

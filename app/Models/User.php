@@ -19,9 +19,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
-        'password',
     ];
 
     /**
@@ -43,8 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $guard_name = 'sanctum';
+
     public function bills()
     {
-        return $this->belongsToMany(Bill::class);
+        return $this->belongsToMany(Bill::class,'bill_user','bill_id','user_id');
     }
 }

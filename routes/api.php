@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('excel','App\Http\Controllers\BillController@import');
+Route::get('bill/{id}','App\Http\Controllers\BillController@getBillsById');
+Route::get('bills/{id}','App\Http\Controllers\BillController@getBillsByUser');
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
