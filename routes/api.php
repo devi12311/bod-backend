@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('excel','App\Http\Controllers\BillController@import');
 Route::get('bill/{id}','App\Http\Controllers\BillController@getBillsById');
 Route::get('bills/{id}','App\Http\Controllers\BillController@getBillsByUser');
+Route::put('bills/{id}','App\Http\Controllers\BillController@editBillData');
+Route::post('returns/{id}','App\Http\Controllers\BillController@returns');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

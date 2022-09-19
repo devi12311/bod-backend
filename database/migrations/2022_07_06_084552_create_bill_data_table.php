@@ -23,17 +23,17 @@ class CreateBillDataTable extends Migration
             $table->decimal('PRICE');
             $table->integer('BOD_Deliver_AMOUNT');
             $table->string('BOD_DELIVER_UNIT');
-            $table->string('itemMissing')->nullable();
-            $table->string('wrongItem')->nullable();
-            $table->decimal('nameOfCorrectedItem')->nullable();
-            $table->integer('wrongQuantity')->nullable();
+            $table->boolean('itemMissing')->nullable();
+            $table->boolean('wrongItem')->nullable();
+            $table->string('nameOfCorrectedItem')->nullable();
+            $table->boolean('wrongQuantity')->nullable();
             $table->string('quantityNeeded')->nullable();
-            $table->string('damaged')->nullable();
+            $table->boolean('damaged')->nullable();
             $table->string('typeOfDamage')->nullable();
             $table->decimal('damagedPhoto')->nullable();
-            $table->integer('comments')->nullable();
-            $table->string('accepted')->nullable();
-            $table->string('rejected')->nullable();
+            $table->string('comments')->nullable();
+            $table->boolean('accepted')->nullable();
+            $table->boolean('rejected')->nullable();
             $table->timestamps();
         });
     }
