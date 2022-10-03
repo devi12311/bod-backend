@@ -15,7 +15,9 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained();
+            $table->foreignId('company_id')->constrained();
+            $table->unsignedBigInteger('client_id');
+            $table->string('status')->default('pending');
             $table->string('RECEIVER')->nullable();
             $table->string('TRUCK_DRIVER')->nullable();
             $table->string('PRINTED_AT')->nullable();

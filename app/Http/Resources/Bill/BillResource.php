@@ -29,6 +29,7 @@ class BillResource extends JsonResource
 
 
             'client' => new ClientResource($this->client),
+            'bill_data' => BillDataResource::collection($this->billData),
 //            'user' => new UserResource($this->user)
         ];
     }

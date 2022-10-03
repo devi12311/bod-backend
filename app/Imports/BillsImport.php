@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Bill;
 use App\Models\BillData;
 use App\Models\Client;
+use App\Models\Company;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -20,7 +21,6 @@ class BillsImport implements ToCollection
     public function collection(Collection $rows)
     {
         unset($rows[0],$rows[1]);
-
             $client = Client::create([
                 'CLIENT_ID' => $rows[2][0],
                 'CLIENT_NUMBER' => $rows[2][1],
@@ -35,8 +35,17 @@ class BillsImport implements ToCollection
                 'CLIENT_EMAIL' => $rows[2][10],
             ]);
 
+        $companyFound = Company::where('name',request('company_name'));
+        if($companyFound->count() == 0){
+            $company = Company::create([
+                'name' => request('company_name')
+            ]);
+        }else{
+            $company = $companyFound->first();
+        }
             $bill = Bill::create([
                 'client_id' => $client['id'],
+                'company_id'=>$company['id'],
                 'RECEIVER' => $rows[2][11],
                 'TRUCK_DRIVER' => $rows[2][12],
                 'PRINTED_AT' => $rows[2][13],
