@@ -1,3 +1,11 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# GitHub recommends pinning actions to a commit SHA.
+# To get a newer version, you will need to update the SHA.
+# You can also reference a tag or branch, but the action may change without warning.
 
 name: Deploy to Amazon ECS
 
@@ -5,21 +13,22 @@ on:
   push:
     branches:
       - main
+
 env:
-  AWS_REGION: {{ secrets.MY_AWS_REGION }}                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: {{ secrets.ECR_REPOSITORY }}           # set this to your Amazon ECR repository name
-  ECS_SERVICE: {{ secrets.ECS_SERVICE }}                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: {{ secrets.ECS_CLUSTER }}                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: {{ secrets.ECS_TASK_DEFINITION }} # set this to the path to your Amazon ECS task definition
-  # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: {{ secrets.CONTAINER_NAME }}           # set this to the name of the container in the
-  # containerDefinitions section of your task definition
+  AWS_REGION: eu-central-1                   # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: bod-develop           # set this to your Amazon ECR repository name
+  ECS_SERVICE: MY_ECS_SERVICE                 # set this to your Amazon ECS service name
+  ECS_CLUSTER: MY_ECS_CLUSTER                 # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
+                                               # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: MY_CONTAINER_NAME           # set this to the name of the container in the
+                                               # containerDefinitions section of your task definition
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: deploy-develop
+    environment: production
 
     steps:
       - name: Checkout
@@ -30,7 +39,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
@@ -53,14 +62,14 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@97587c9d45a4930bf0e3da8dd2feb2a463cf4a3a
         with:
-          task-definition: ${{ secrets.ECS_TASK_DEFINITION }}
-          container-name: ${{ secrets.CONTAINER_NAME }}
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@de0132cf8cdedb79975c6d42b77eb7ea193cf28e
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ secrets.ECS_SERVICE }}
-          cluster: ${{ secrets.ECS_CLUSTER }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
