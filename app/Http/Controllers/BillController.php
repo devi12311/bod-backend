@@ -35,9 +35,9 @@ class BillController extends Controller
     }
 
     public function import(Request $request) {
-//        $this->validate($request, [
-//            'select_file'  => 'required|mimes:xls,xlsx'
-//        ]);
+        $this->validate($request, [
+            'select_file'  => 'required|mimes:xls,xlsx'
+        ]);
         $path = $request->file('select_file');
 // $data = Excel::load($path, function($reader) {})->get();
         $data = Excel::import(new BillsImport(), $path);
