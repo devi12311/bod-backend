@@ -18,7 +18,18 @@ class BillDataResource extends JsonResource
             'BOD_ORDER_UNIT'=> $this->BOD_ORDER_UNIT,
             'PRICE'=> $this->PRICE,
             'BOD_Deliver_AMOUNT'=> $this->BOD_Deliver_AMOUNT,
-            'BOD_DELIVER_UNIT'=> $this->BOD_DELIVER_UNIT
+            'BOD_DELIVER_UNIT'=> $this->BOD_DELIVER_UNIT,
+            'itemMissing' => $this->itemMissing,
+            'wrongItem' => $this->wrongItem,
+            'nameOfCorrectedItem' => $this->nameOfCorrectedItem,
+            'wrongQuantity' => $this->wrongQuantity,
+            'quantityNeeded' => $this->quantityNeeded,
+            'damaged' => $this->damaged,
+            'typeOfDamage' => $this->typeOfDamage,
+            'damagedPhoto' => $this->damagedPhoto,
+            'comments'=> $this->comments,
+            'accepted' => $this->accepted,
+            'rejected' => $this->rejected  
         ];
     }
 }

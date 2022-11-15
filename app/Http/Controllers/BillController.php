@@ -20,7 +20,6 @@ class BillController extends Controller
     public function getBillsByUser($id)
     {
 //        $bill = Bill::with('users');
-
             if(filter_var($id, FILTER_VALIDATE_INT) !== false) {
                 $bill = Bill::whereHas('users', function ($query) use ($id) {
                     $query->where('user_id', $id);
@@ -33,61 +32,62 @@ class BillController extends Controller
 
         return BillResource::collection($bill);
     }
-
     public function import(Request $request) {
-        $this->validate($request, [
-            'select_file'  => 'required|mimes:xls,xlsx'
-        ]);
+//        $this->validate($request, [
+//            'select_file'  => 'required|mimes:xls,xlsx'
+//        ]);
         $path = $request->file('select_file');
 // $data = Excel::load($path, function($reader) {})->get();
         $data = Excel::import(new BillsImport(), $path);
+
         return 'Excel Data Imported successfully.';
     }
 
     public function editBillData($id,Request $request)
     {
-        $data = BillData::where('id',\request('column_id'))->where('bill_id',$id)->first();
-
-        if(isset($request->itemMissing)){
-            $data->update([
-                "itemMissing" => $request->itemMissing,
-            ]);
-        }
-        if(isset($request->wrongItem)){
-            $data->update([
-                "wrongItem" =>  $request->wrongItem,
-                "nameOfCorrectedItem" => $request->nameOfCorrectedItem
-            ]);
-        }
-        if(isset($request->wrongQuantity)){
-            $data->update([
-                "wrongQuantity" => $request->wrongQuantity,
-                "quantityNeeded" => $request->quantityNeeded,
-            ]);
-        }
-        if(isset($request->damaged)){
-            $data->update([
-                "damaged" => $request->damaged,
-                "typeOfDamage" => $request->typeOfDamage,
-//                "damagedPhoto" => $request->damagedPhoto,
-            ]);
-        }
-        if(isset($request->comments)){
-            $data->update([
-                "comments" => $request->comments,
-            ]);
-        }
-        if(isset($request->accepted)){
-            $data->update([
-                "accepted" => $request->accepted,
-            ]);
-            Bill::where("id",$id)->update(['status'=>'accepted']);
-        }
-        if(isset($request->rejected)){
-            $data->update([
-                "rejected" => $request->rejected
-            ]);
-            Bill::where("id",$id)->update(['status'=>'rejected']);
+            foreach ($request['data'] as $data){
+            $column = BillData::where('id',$data['column_id'])->where('bill_id',$id)->first();
+            if(isset($data['itemMissing'])){
+                $column->update([
+                    "itemMissing" => $data['itemMissing'],
+                ]);
+            }
+            if(isset($data['wrongItem'])){
+                $column->update([
+                    "wrongItem" =>  $data['wrongItem'],
+                    "nameOfCorrectedItem" => $data['nameOfCorrectedItem']
+                ]);
+            }
+            if(isset($data['wrongQuantity'])){
+                $column->update([
+                    "wrongQuantity" => $data['wrongQuantity'],
+                    "quantityNeeded" => $data['quantityNeeded'],
+                ]);
+            }
+            if(isset($data['damaged'])){
+                $column->update([
+                    "damaged" => $data['damaged'],
+                    "typeOfDamage" => $data['typeOfDamage'],
+    //                "damagedPhoto" => $request->damagedPhoto,
+                ]);
+            }
+            if(isset($data['comments'])){
+                $column->update([
+                    "comments" => $data['comments'],
+                ]);
+            }
+            if(isset($data['accepted'])){
+                $column->update([
+                    "accepted" => $data['accepted'],
+                ]);
+                Bill::where("id",$id)->update(['status'=>'accepted']);
+            }
+            if(isset($data['rejected'])){
+                $column->update([
+                    "rejected" => $data['rejected']
+                ]);
+                Bill::where("id",$id)->update(['status'=>'rejected']);
+            }
         }
         return ;
     }

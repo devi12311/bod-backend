@@ -16,13 +16,13 @@ class CreateBillDataTable extends Migration
         Schema::create('bill_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bill_id')->constrained();
-            $table->integer('BOD_DELIVER_ITEM_NR');
-            $table->string('BOD_ITEM_DESCRIPTION');
-            $table->integer('BOD_ORDER_AMOUNT');
-            $table->string('BOD_ORDER_UNIT');
-            $table->decimal('PRICE');
-            $table->integer('BOD_Deliver_AMOUNT');
-            $table->string('BOD_DELIVER_UNIT');
+            $table->integer('BOD_DELIVER_ITEM_NR')->nullable();
+            $table->string('BOD_ITEM_DESCRIPTION')->nullable();
+            $table->integer('BOD_ORDER_AMOUNT')->nullable();
+            $table->string('BOD_ORDER_UNIT')->nullable();
+            $table->decimal('PRICE')->nullable();
+            $table->integer('BOD_Deliver_AMOUNT')->nullable();
+            $table->string('BOD_DELIVER_UNIT')->nullable();
             $table->boolean('itemMissing')->default(false);
             $table->boolean('wrongItem')->nullable();
             $table->string('nameOfCorrectedItem')->nullable();
